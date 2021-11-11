@@ -1,61 +1,72 @@
-from configs.scales import major, minor, sharp_tones, flat_tones
+from configs.scales import ALPHABET, NOTES, MAJOR_SCALE, SCALES, SHARP_SIGN, FLAT_SIGN
 import json
 import sys
 
 START = sys.argv[1] if len(sys.argv) > 1 else 'C'
 
-def major_scale(starting_note: str) -> dict:
+def return_alphabet_order(tonic_: str = 'C') -> list:
+    ind = ALPHABET.index(tonic_[0])
+    return ALPHABET[ind:] + ALPHABET[:ind]
 
-    for i in range(0, len(sharp_tones)):
-        if sharp_tones[i] == starting_note:
-            start_pos = i
 
-    maj_steps = [(i + start_pos) % len(sharp_tones) for i in major]
-    maj_scale = [sharp_tones[(i + start_pos) % len(sharp_tones)] for i in major]
+def chromatic_scale(tonic_: str = 'C') -> list:
     
-    return {
-        "notes": maj_scale,
-        "steps": maj_steps
-    }
+    for i in range(len(NOTES)):
+        if tonic_ in NOTES[i]:
+            ind = i
 
-def minor_scale(major_scale_steps: list) -> dict:
+    return NOTES[ind:] + NOTES[:ind]
 
-    min_steps = []
 
-    for i in range(0, len(major_scale_steps)):
-        if i + 1 in [3, 6, 7]:
-            min_steps.append(major_scale_steps[i] - 1)
-        else:
-            min_steps.append(major_scale_steps[i])
+def degrees_to_halfsteps(
+    degrees: list
+    ) -> list:
 
-    return {
-        'notes': [sharp_tones[i] for i in min_steps],
-        'steps': min_steps
-    }
+    halfsteps = []
 
-def harmonic_minor_scale(major_scale_steps: list) -> dict:
-
-    min_steps = []
-
-    for i in range(0, len(major_scale_steps)):
-        if i + 1 in [3, 6]:
-            min_steps.append(major_scale_steps[i] - 1)
-        else:
-            min_steps.append(major_scale_steps[i])
-
-    return {
-        'notes': [sharp_tones[i] for i in min_steps],
-        'steps': min_steps
-    }
+    for i in range(len(degrees)):
+        if len(degrees[i]) == 1:
+            halfsteps.append(MAJOR_SCALE[i])
+        if '#' in degrees[i]:
+            halfsteps.append(MAJOR_SCALE[i] + 1)
+        if 'b' in degrees[i]:
+            halfsteps.append(MAJOR_SCALE[i] - 1)
     
+    return halfsteps
+
+
+def halfsteps_to_scale(
+    alph_order: list,
+    chromatic_scale: list,
+    halfsteps: list
+    ) -> list:
+
+    note_groups = [chromatic_scale[i] for i in halfsteps]
+
+    scale_notes = []
+
+    for i in range(len(note_groups)):
+        scale_notes.extend([x.replace('#', SHARP_SIGN).replace('b', FLAT_SIGN) for x in note_groups[i] if alph_order[i] in x])
+    
+    return scale_notes
+
+
+def scales_per_note(
+    tonic_: str,
+    ) -> dict:
+
+    alph = return_alphabet_order(tonic_)
+    chr_ = chromatic_scale(tonic_)
+
+    for scale in SCALES:
+        print(f'{tonic_} {scale}')
+        hs = degrees_to_halfsteps(SCALES[scale])
+        notes = halfsteps_to_scale(alph_order=alph, chromatic_scale=chr_, halfsteps=hs)
+        print(notes)
+
 
     
 
 if __name__ == "__main__":
-    maj = major_scale(starting_note=START)
-    print(f'{START} major')
-    print(maj)
-    print(f'{START} minor')
-    print(minor_scale(major_scale_steps=maj['steps']))
-    print(f'{START} harmonic minor')
-    print(harmonic_minor_scale(major_scale_steps=maj['steps']))
+    scales_per_note(START)
+
