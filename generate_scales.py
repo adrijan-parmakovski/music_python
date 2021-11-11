@@ -4,11 +4,6 @@ import sys
 
 START = sys.argv[1] if len(sys.argv) > 1 else 'C'
 
-def return_alphabet_order(tonic_: str = 'C') -> list:
-    ind = ALPHABET.index(tonic_[0])
-    return ALPHABET[ind:] + ALPHABET[:ind]
-
-
 def chromatic_scale(tonic_: str = 'C') -> list:
     
     for i in range(len(NOTES)):
@@ -17,6 +12,19 @@ def chromatic_scale(tonic_: str = 'C') -> list:
 
     return NOTES[ind:] + NOTES[:ind]
 
+def degrees_to_alph_order(
+    degrees: list,
+    tonic_: str = 'C'
+    ) -> list:
+
+    ind = ALPHABET.index(tonic_[0])
+    full_alph = ALPHABET[ind:] + ALPHABET[:ind]
+
+    degs = [int(x[0]) for x in degrees] 
+    alphabet_order = [full_alph[(x - 1) % 7] for x in degs]
+
+    return alphabet_order
+    
 
 def degrees_to_halfsteps(
     degrees: list
@@ -26,11 +34,17 @@ def degrees_to_halfsteps(
 
     for i in range(len(degrees)):
         if len(degrees[i]) == 1:
-            halfsteps.append(MAJOR_SCALE[i])
+            halfsteps.append(
+                MAJOR_SCALE[(int(degrees[i][0]) - 1) % 7]
+            )
         if '#' in degrees[i]:
-            halfsteps.append(MAJOR_SCALE[i] + 1)
+            halfsteps.append(
+                MAJOR_SCALE[(int(degrees[i][0]) - 1) % 7] + 1
+            )
         if 'b' in degrees[i]:
-            halfsteps.append(MAJOR_SCALE[i] - 1)
+            halfsteps.append(
+                MAJOR_SCALE[(int(degrees[i][0]) - 1) % 7] - 1
+            )
     
     return halfsteps
 
@@ -55,18 +69,17 @@ def scales_per_note(
     tonic_: str,
     ) -> dict:
 
-    alph = return_alphabet_order(tonic_)
     chr_ = chromatic_scale(tonic_)
 
     for scale in SCALES:
+        alph = degrees_to_alph_order(tonic_=tonic_, degrees=SCALES[scale])
         print(f'{tonic_} {scale}')
         hs = degrees_to_halfsteps(SCALES[scale])
         notes = halfsteps_to_scale(alph_order=alph, chromatic_scale=chr_, halfsteps=hs)
         print(notes)
-
-
     
 
 if __name__ == "__main__":
-    scales_per_note(START)
-
+    scales_per_note(
+        tonic_=START
+    )
