@@ -1,5 +1,5 @@
 
-from scales import ALPHABET, NOTES, MAJOR_SCALE, SCALES, SHARP_SIGN, FLAT_SIGN, INTERVALS_BY_SEMITONES
+from scales import ALPHABET, NOTES, MAJOR_SCALE_HALFSTEPS, SCALES, SHARP_SIGN, FLAT_SIGN, INTERVALS_BY_SEMITONES
 import json
 import sys
 
@@ -37,15 +37,15 @@ def degrees_to_halfsteps(
     for i in range(len(degrees)):
         if len(degrees[i]) == 1:
             halfsteps.append(
-                MAJOR_SCALE[(int(degrees[i][0]) - 1) % 7]
+                MAJOR_SCALE_HALFSTEPS[(int(degrees[i][0]) - 1) % 7]
             )
         if '#' in degrees[i]:
             halfsteps.append(
-                MAJOR_SCALE[(int(degrees[i][0]) - 1) % 7] + 1
+                MAJOR_SCALE_HALFSTEPS[(int(degrees[i][0]) - 1) % 7] + 1
             )
         if 'b' in degrees[i]:
             halfsteps.append(
-                MAJOR_SCALE[(int(degrees[i][0]) - 1) % 7] - 1
+                MAJOR_SCALE_HALFSTEPS[(int(degrees[i][0]) - 1) % 7] - 1
             )
     
     return halfsteps
@@ -85,21 +85,19 @@ def fix_notation(note: str) -> str:
     return note.replace('#', SHARP_SIGN).replace('b', FLAT_SIGN)
 
 
+# def aug_dim_note(note: str, halfsteps: int) -> str:
 
-def augment_note(note: str = 'C') -> str:
+    # find a note in the chromatic_scale that's that many halfsteps away and has the same note name
 
-    if 'b' in note:
-        return note.replace('b', '')
 
-    return note + '#'
 
-def diminish_note(note: str = 'C') -> str:
 
-    if '#' in note:
-        return note.replace('#', '')
-    
-    return note + 'b'
-    
+def find_intervals_hs(interval: str = 'P5') -> int:
+
+    for key in INTERVALS_BY_SEMITONES:
+        if interval in INTERVALS_BY_SEMITONES[key]:
+            return key
+
 
 
 def return_interval_from_note(
@@ -109,7 +107,7 @@ def return_interval_from_note(
 
     # print(f'Getting {interval} from {starting_note}')
 
-    major_scale = scale_from_note(
+    MAJOR_SCALE_HALFSTEPS = scale_from_note(
         tonic_=starting_note,
         scale='major'
     )
@@ -117,14 +115,16 @@ def return_interval_from_note(
     degree = int(interval[1])
     int_type = interval[0]
 
+    hs = find_intervals_hs(interval)
+
     if int_type in ['P', 'M']:
-        return major_scale[(degree - 1) % 7]
+        return MAJOR_SCALE_HALFSTEPS[(degree - 1) % 7]
     if int_type == 'A':
-        return augment_note(major_scale[(degree - 1) % 7])
+        return augment_note(MAJOR_SCALE_HALFSTEPS[(degree - 1) % 7])
     if int_type == 'm':
-        return diminish_note(major_scale[(degree - 1) % 7])
+        return diminish_note(MAJOR_SCALE_HALFSTEPS[(degree - 1) % 7])
     if int_type == 'd':
-        return diminish_note(diminish_note(major_scale[(degree - 1) % 7]))
+        return diminish_note(diminish_note(MAJOR_SCALE_HALFSTEPS[(degree - 1) % 7]))
 
 
 
@@ -166,13 +166,16 @@ if __name__ == "__main__":
     intervals = {}
     for i in INTERVALS_BY_SEMITONES:
         for hs in INTERVALS_BY_SEMITONES[i]:
-            intervals[hs] = return_interval_from_note(START, hs)
+            # intervals[hs] = return_interval_from_note(START, hs)
+            print(f'{hs} - {find_intervals_hs(hs)}')
 
-    print(json.dumps(intervals, indent=4))
+    # print(json.dumps(intervals, indent=4))
 
     # for key in intervals:
     #     c = intervals[key] == TEST_DICT[key]
-    #     print(f'for {key} the result is {c}')
+    #     if c is False:
+    #         print(f'for {key} wrong: {intervals[key]} - RIGHT: {TEST_DICT[key]}')
+        # print(f'for {key} the result is {c}')
 
 
 

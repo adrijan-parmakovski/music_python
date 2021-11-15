@@ -16,7 +16,7 @@ NOTES = [
 ALPHABET = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 
 # Scales in terms of half-steps relative to the tonic degree
-MAJOR_SCALE = [0, 2, 4, 5, 7, 9, 11]
+MAJOR_SCALE_HALFSTEPS = [0, 2, 4, 5, 7, 9, 11]
 
 SCALES = { # by degrees in relation to the major scale
     'major': ['1', '2', '3', '4', '5', '6', '7'],
