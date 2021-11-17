@@ -1,10 +1,19 @@
 
-from scales import ALPHABET, NOTES, MAJOR_SCALE_HALFSTEPS, SCALES, SHARP_SIGN, FLAT_SIGN, INTERVALS_BY_SEMITONES
+from scales import (
+    ALPHABET,
+    NOTES,
+    MAJOR_SCALE_HALFSTEPS,
+    SCALES,
+    SHARP_SIGN, FLAT_SIGN,
+    INTERVALS_BY_SEMITONES
+)
 import json
 import sys
 
 START = sys.argv[1] if len(sys.argv) > 1 else 'C'
 SCALE = sys.argv[2] if len(sys.argv) > 2 else 'major'
+
+MAJOR_SCALE_DEGREES = SCALES['major']
 
 def chromatic_scale(tonic_: str = 'C') -> list:
     
@@ -99,32 +108,34 @@ def find_intervals_hs(interval: str = 'P5') -> int:
             return key
 
 
-
 def return_interval_from_note(
     starting_note: str = 'C',
     interval: str = 'P5'
     ) -> str:
 
-    # print(f'Getting {interval} from {starting_note}')
 
-    MAJOR_SCALE_HALFSTEPS = scale_from_note(
+    major_scale = scale_from_note(
         tonic_=starting_note,
         scale='major'
     )
+    major_scale.append(starting_note)
 
-    degree = int(interval[1])
-    int_type = interval[0]
+    degree = int(interval[1]) # e.g. P5 -> 5
+    hs = find_intervals_hs(interval) # find how many halfsteps from the root note the interval goes, e.g. P5 -> 7
+    degree_note_hs = MAJOR_SCALE_HALFSTEPS[(degree - 1) % 7]
 
-    hs = find_intervals_hs(interval)
 
-    if int_type in ['P', 'M']:
-        return MAJOR_SCALE_HALFSTEPS[(degree - 1) % 7]
-    if int_type == 'A':
-        return augment_note(MAJOR_SCALE_HALFSTEPS[(degree - 1) % 7])
-    if int_type == 'm':
-        return diminish_note(MAJOR_SCALE_HALFSTEPS[(degree - 1) % 7])
-    if int_type == 'd':
-        return diminish_note(diminish_note(MAJOR_SCALE_HALFSTEPS[(degree - 1) % 7]))
+    print(f'Interval {interval} that is {hs} away from starting note, while the perfect interval is {degree_note_hs} is {abs(degree_note_hs - hs)} halfsteps away from the major scale degree note')
+
+
+    # if int_type in ['P', 'M']:
+    #     return MAJOR_SCALE_HALFSTEPS[(degree - 1) % 7]
+    # if int_type == 'A':
+    #     return augment_note(MAJOR_SCALE_HALFSTEPS[(degree - 1) % 7])
+    # if int_type == 'm':
+    #     return diminish_note(MAJOR_SCALE_HALFSTEPS[(degree - 1) % 7])
+    # if int_type == 'd':
+    #     return diminish_note(diminish_note(MAJOR_SCALE_HALFSTEPS[(degree - 1) % 7]))
 
 
 
@@ -165,9 +176,9 @@ if __name__ == "__main__":
 
     intervals = {}
     for i in INTERVALS_BY_SEMITONES:
-        for hs in INTERVALS_BY_SEMITONES[i]:
-            # intervals[hs] = return_interval_from_note(START, hs)
-            print(f'{hs} - {find_intervals_hs(hs)}')
+        for int_ in INTERVALS_BY_SEMITONES[i]:
+            return_interval_from_note(starting_note='C', interval=int_)
+            
 
     # print(json.dumps(intervals, indent=4))
 
