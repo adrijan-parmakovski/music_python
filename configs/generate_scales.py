@@ -5,10 +5,12 @@ from scales import (
     MAJOR_SCALE_HALFSTEPS,
     SCALES,
     SHARP_SIGN, FLAT_SIGN,
-    INTERVALS_BY_SEMITONES
+    INTERVALS_BY_SEMITONES,
+    CHORDS_BY_INTERVAL
 )
 import json
 import sys
+import logging
 
 START = sys.argv[1] if len(sys.argv) > 1 else 'C'
 SCALE = sys.argv[2] if len(sys.argv) > 2 else 'major'
@@ -94,11 +96,17 @@ def fix_notation(note: str) -> str:
     return note.replace('#', SHARP_SIGN).replace('b', FLAT_SIGN)
 
 
-# def aug_dim_note(note: str, halfsteps: int) -> str:
-
+def aug_dim_note(note: str, halfsteps: int) -> str:
     # find a note in the chromatic_scale that's that many halfsteps away and has the same note name
+    
+    note_name = note[0] # e.g. C# -> C
+    chr_ = chromatic_scale(tonic_=note)
 
-
+    note_group = chr_[halfsteps + 12 % 12]
+    for x in note_group:
+        if note_name in x:
+            logging.info(f'Note {note} changed by {halfsteps} halfsteps returns note {x}.')
+            return x
 
 
 def find_intervals_hs(interval: str = 'P5') -> int:
@@ -113,81 +121,56 @@ def return_interval_from_note(
     interval: str = 'P5'
     ) -> str:
 
+    logging.info(f'Looking for the note that is {interval} away from {starting_note}')
 
     major_scale = scale_from_note(
         tonic_=starting_note,
         scale='major'
     )
     major_scale.append(starting_note)
+    major_hs = MAJOR_SCALE_HALFSTEPS + [12]
 
     degree = int(interval[1]) # e.g. P5 -> 5
     hs = find_intervals_hs(interval) # find how many halfsteps from the root note the interval goes, e.g. P5 -> 7
-    degree_note_hs = MAJOR_SCALE_HALFSTEPS[(degree - 1) % 7]
+    logging.info(f'Interval {interval} is {hs} halfsteps away from the root note.')
+    degree_note_hs = major_hs[(degree - 1) % 8]
+
+    return aug_dim_note(
+        note=major_scale[(degree - 1) % 8],
+        halfsteps = hs - degree_note_hs
+    )
+
+def return_chord_notes_by_interval(
+    starting_note = 'C',
+    interval_steps = ['m3', 'M2']
+    ):
+
+    chord_notes = [starting_note]
+
+    for i in range(len(interval_steps)):
+        if i == 0:
+            chord_notes.append(return_interval_from_note(
+                starting_note = starting_note,
+                interval=interval_steps[i]
+            ))
+        elif i > 0:
+            chord_notes.append(return_interval_from_note(
+                starting_note=chord_notes[i],
+                interval=interval_steps[i]
+            ))
+    return chord_notes
 
 
-    print(f'Interval {interval} that is {hs} away from starting note, while the perfect interval is {degree_note_hs} is {abs(degree_note_hs - hs)} halfsteps away from the major scale degree note')
 
-
-    # if int_type in ['P', 'M']:
-    #     return MAJOR_SCALE_HALFSTEPS[(degree - 1) % 7]
-    # if int_type == 'A':
-    #     return augment_note(MAJOR_SCALE_HALFSTEPS[(degree - 1) % 7])
-    # if int_type == 'm':
-    #     return diminish_note(MAJOR_SCALE_HALFSTEPS[(degree - 1) % 7])
-    # if int_type == 'd':
-    #     return diminish_note(diminish_note(MAJOR_SCALE_HALFSTEPS[(degree - 1) % 7]))
-
-
-
-TEST_DICT = {'P1': 'C',
- 'd2': 'Dbb',
- 'm2': 'Db',
- 'A1': 'C#',
- 'M2': 'D',
- 'd3': 'Ebb',
- 'm3': 'Eb',
- 'A2': 'D#',
- 'M3': 'E',
- 'd4': 'Fb',
- 'P4': 'F',
- 'A3': 'E#',
- 'd5': 'Gb',
- 'A4': 'F#',
- 'P5': 'G',
- 'd6': 'Abb',
- 'm6': 'Ab',
- 'A5': 'G#',
- 'M6': 'A',
- 'd7': 'Bbb',
- 'm7': 'Bb',
- 'A6': 'A#',
- 'M7': 'B',
- 'd8': 'Cb',
- 'P8': 'C',
- 'A7': 'B#'}
-
-    
 
 if __name__ == "__main__":
-    # print(scale_from_note(
-    #     tonic_=START,
-    #     scale=SCALE
-    # ))
-
-    intervals = {}
-    for i in INTERVALS_BY_SEMITONES:
-        for int_ in INTERVALS_BY_SEMITONES[i]:
-            return_interval_from_note(starting_note='C', interval=int_)
-            
+    # intervals = {}
+    # for i in INTERVALS_BY_SEMITONES:
+    #     for int_ in INTERVALS_BY_SEMITONES[i]:
+    #         intervals[int_] = return_interval_from_note(starting_note='C', interval=int_)
 
     # print(json.dumps(intervals, indent=4))
 
-    # for key in intervals:
-    #     c = intervals[key] == TEST_DICT[key]
-    #     if c is False:
-    #         print(f'for {key} wrong: {intervals[key]} - RIGHT: {TEST_DICT[key]}')
-        # print(f'for {key} the result is {c}')
-
-
+    print(return_chord_notes_by_interval())
 
 
