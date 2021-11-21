@@ -116,7 +116,7 @@ def find_intervals_hs(interval: str = 'P5') -> int:
             return key
 
 
-def return_interval_from_note(
+def return_interval(
     starting_note: str = 'C',
     interval: str = 'P5'
     ) -> str:
@@ -142,35 +142,34 @@ def return_interval_from_note(
 
 def return_chord_notes_by_interval(
     starting_note = 'C',
-    interval_steps = ['m3', 'M2']
+    interval_name = 'major'
     ):
+
+    interval_steps = CHORDS_BY_INTERVAL[interval_name]
 
     chord_notes = [starting_note]
 
     for i in range(len(interval_steps)):
         if i == 0:
-            chord_notes.append(return_interval_from_note(
+            chord_notes.append(return_interval(
                 starting_note = starting_note,
                 interval=interval_steps[i]
             ))
         elif i > 0:
-            chord_notes.append(return_interval_from_note(
+            chord_notes.append(return_interval(
                 starting_note=chord_notes[i],
                 interval=interval_steps[i]
             ))
-    return chord_notes
+    print(f'\nThe {interval_name} chord starting at {starting_note} is: {chord_notes}.\n')
+    # return chord_notes
 
 
 
 
 if __name__ == "__main__":
-    # intervals = {}
-    # for i in INTERVALS_BY_SEMITONES:
-    #     for int_ in INTERVALS_BY_SEMITONES[i]:
-    #         intervals[int_] = return_interval_from_note(starting_note='C', interval=int_)
-
-    # print(json.dumps(intervals, indent=4))
-
-    print(return_chord_notes_by_interval())
+    return_chord_notes_by_interval(
+        starting_note='C',
+        interval_name='major'
+    )
 
 
