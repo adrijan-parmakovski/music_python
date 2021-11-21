@@ -6,7 +6,6 @@ from alphabet import return_chromatic_scale, degree_to_alph_letter
 import logging
 
 
-
 def aug_dim_note(
     note: str,
     halfsteps: int
@@ -47,42 +46,36 @@ def degree_to_note(
     return [x for x in note_group if note_letter in x][0]
 
 
-# def interval_to_note(
-#     starting_note: str,
-#     interval: str
-#     ) -> str:
-#     """
-#     Return the note that is a given interval away from a given starting note.
+def interval_to_note(
+    starting_note: str,
+    interval: str
+    ) -> str:
+    """
+    Return the note that is a given interval away from a given starting note.
 
-#     Steps:
-#         - generate the major scale for the given starting note
-#         - find how many halfsteps away the given interval is
-#         - find out how many halfsteps the interval is from the major scale degree, e.g m5 is one halfstep away from the 5th degree of the major scale
-#         - return the note that is as many halfsteps away from the major scale degree
-#     """
+    Steps:
+        - generate the major scale for the given starting note
+        - find how many halfsteps away the given interval is
+        - find out how many halfsteps the interval is from the major scale degree, e.g m5 is one halfstep away from the 5th degree of the major scale
+        - return the note that is as many halfsteps away from the major scale degree
+    """
 
-#     logging.info(f'Looking for the note that is {interval} away from {starting_note}')
+    logging.info(f'Looking for the note that is {interval} away from {starting_note}')
     
-#     hs = interval_to_halfsteps(interval) # find how many halfsteps from the root note the interval goes, e.g. P5 -> 7
-#     logging.info(f'Interval {interval} is {hs} halfsteps away from the root note.')
+    hs = interval_to_halfsteps(interval) # find how many halfsteps from the root note the interval goes, e.g. P5 -> 7
+    logging.info(f'Interval {interval} is {hs} halfsteps away from the root note.')
 
-#     degree = int(interval[1]) # e.g. P5 -> 5
+    degree = int(interval[1]) # e.g. P5 -> 5
+
+    major_hs = MAJOR_SCALE_HALFSTEPS + [12]
+    degree_note_hs = major_hs[(degree - 1) % 8] # return how many halfsteps away the major scale degree is from the starting note
     
-#     # Get the major scale as well as the major scale halfsteps from the given starting note
-#     # Add the starting note and 12 in the halfsteps, for the perfect octave intervals
-#     major_scale = tonic_to_scale(
-#         tonic_=starting_note,
-#         scale='major'
-#     )
-#     major_scale.append(starting_note)
-#     major_hs = MAJOR_SCALE_HALFSTEPS + [12]
+    degree_note = degree_to_note(starting_note, str(degree))
 
-#     degree_note_hs = major_hs[(degree - 1) % 8] # return how many halfsteps away the major scale degree is from the starting note
-
-#     return aug_dim_note(
-#         note=major_scale[(degree - 1) % 8],
-#         halfsteps = hs - degree_note_hs # the number of halfsteps is the difference between the interval and the major scale degree
-#     )
+    return aug_dim_note(
+        note=degree_note,
+        halfsteps = hs - degree_note_hs # the number of halfsteps is the difference between the interval and the major scale degree
+    )
 
 
 def halfsteps_to_note(
@@ -101,5 +94,6 @@ def halfsteps_to_note(
 if __name__ == '__main__':
     print(
         # halfsteps_to_note(starting_note='C', halfsteps=7)
-        degree_to_note(starting_note='C#', degree='5')
+        # degree_to_note(starting_note='C#', degree='5')
+        interval_to_note(starting_note='Db', interval='P5')
     )
