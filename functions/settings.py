@@ -45,3 +45,12 @@ INTERVALS_BY_HALFSTEPS = {
 SCALES = {
     'major': ['1', '2', '3', '4', '5', '6', '7']
 }
+
+
+
+CHORDS = {
+    'major': ['1', '3', '5'],
+    'minor': ['1', 'b3', '5'],
+    'major_7th': ['1', '3', '5', '7'],
+    'dominant_seventh': ['1', '3', '5', 'b7']
+}

@@ -1,5 +1,5 @@
 from settings import INTERVALS_BY_HALFSTEPS, MAJOR_SCALE_HALFSTEPS, NOTES
-from alphabet import return_chromatic_scale
+from alphabet import return_chromatic_scale, return_note_letter, tonic_to_alph_order
 
 from degrees import degree_order
 
@@ -47,8 +47,22 @@ def notes_to_halfsteps(notes: list) -> int:
             return chr_.index(note)
 
 
-def notes_to_interval(notes: list) -> str:
-    return None
+def notes_to_halfsteps(notes: list) -> int:
+    """
+    Determines how many halfsteps apart the notes are.
+    
+    Steps:
+        - return the chromatic scale starting at the first note
+        - find the index of the note group containing the second note
+    """
+
+    chr_ = return_chromatic_scale(notes[0])
+
+    for i in range(len(chr_)):
+        if notes[1] in chr_[i]:
+            return i
+   
 
 if __name__ == '__main__':
     print(interval_to_halfsteps('M3'))
+    print(notes_to_halfsteps(['C', 'G']))

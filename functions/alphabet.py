@@ -1,4 +1,5 @@
 from settings import ALPHABET, NOTES
+import re
 
 def tonic_to_alph_order(tonic: str) -> list:
     """"
@@ -42,6 +43,8 @@ def degree_to_alph_letter(
 
     return alph[int(degree_order) - 1 % 7]
 
+def return_note_letter(note: str) -> str:
+    return re.search('[A-G]', note).group()
 
 if __name__ == '__main__':
     print(

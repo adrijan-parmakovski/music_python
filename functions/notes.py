@@ -1,6 +1,6 @@
 from settings import MAJOR_SCALE_HALFSTEPS
 
-from halfsteps import interval_to_halfsteps, degree_to_halfsteps
+from halfsteps import interval_to_halfsteps, degree_to_halfsteps, notes_to_halfsteps
 from alphabet import return_chromatic_scale, degree_to_alph_letter
 
 import logging
