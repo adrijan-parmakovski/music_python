@@ -18,5 +18,5 @@ def tonic_to_scale(
 
 if __name__ == '__main__':
     print(
-        tonic_to_scale('C', 'major')
+        tonic_to_scale('C', 'minor')
     )

@@ -14,16 +14,23 @@ def notes_to_interval(notes: list) -> str:
         - from the list of intervals by halfsteps, picks the one that corresponds to the degree
     """
 
+    first_note_letter = return_note_letter(notes[0])
+    second_note_letter = return_note_letter(notes[1])
+    
     alph = tonic_to_alph_order(
-        return_note_letter(notes[0])
+        first_note_letter
     )
     degree = str(alph.index(
-        return_note_letter(notes[1])
+        second_note_letter
     ) + 1)
 
     hs = notes_to_halfsteps(notes)
-    print(hs)
     INTERVALS_BY_HALFSTEPS[hs]
+
+    if second_note_letter == first_note_letter and hs == 11:
+        degree = '8'
+    if degree == '7' and hs == 0:
+        hs = 12
 
     return [x for x in INTERVALS_BY_HALFSTEPS[hs] if degree in x][0]
 

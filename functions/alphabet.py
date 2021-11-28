@@ -1,4 +1,5 @@
 from settings import ALPHABET, NOTES
+from degrees import degree_order
 import re
 
 def tonic_to_alph_order(tonic: str) -> list:
@@ -36,12 +37,12 @@ def degree_to_alph_letter(
     e.g. 5th degree from C is G, while 5b will also return G.    
     """
 
-    degree_order = degree[0]
+    _degree_order = degree_order(degree)
     # 
     ind = ALPHABET.index(tonic[0])
     alph = ALPHABET[ind:] + ALPHABET[:ind]
 
-    return alph[int(degree_order) - 1 % 7]
+    return alph[int(_degree_order) - 1 % 7]
 
 def return_note_letter(note: str) -> str:
     return re.search('[A-G]', note).group()
