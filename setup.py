@@ -8,7 +8,7 @@ with open('requirements.txt', 'r', encoding='utf-8') as f:
     f.close()
 
 setup(
-    name = 'PyMusiC#',
+    name = 'PyMusiC',
     version = '0.1.0',
     py_modules = ['pymusic'],
     packages = find_packages(exclude=['tests']),
