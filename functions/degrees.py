@@ -1,4 +1,4 @@
-from settings import INTERVALS_BY_HALFSTEPS
+from functions.settings import INTERVALS_BY_HALFSTEPS
 import re
 
 def interval_to_degree(interval: str) -> str:

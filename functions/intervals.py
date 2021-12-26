@@ -1,7 +1,7 @@
-from settings import INTERVALS_BY_HALFSTEPS
+from functions.settings import INTERVALS_BY_HALFSTEPS
 
-from alphabet import tonic_to_alph_order, return_note_letter
-from halfsteps import notes_to_halfsteps
+from functions.alphabet import tonic_to_alph_order, return_note_letter
+from functions.halfsteps import notes_to_halfsteps
 
 
 def notes_to_interval(notes: list) -> str:

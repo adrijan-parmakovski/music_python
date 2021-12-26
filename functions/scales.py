@@ -1,6 +1,5 @@
-from settings import SCALES
-
-from notes import degree_to_note
+from functions.settings import SCALES
+from functions.notes import degree_to_note
 
 
 def tonic_to_scale(

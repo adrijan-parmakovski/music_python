@@ -10,13 +10,16 @@ with open('requirements.txt', 'r', encoding='utf-8') as f:
 setup(
     name = 'PyMusiC',
     version = '0.1.0',
+    author = 'Adrijan Parmakovski',
     py_modules = ['pymusic'],
     packages = find_packages(exclude=['tests']),
     install_requires = [
         'click'
     ],
-    entry_points = """
-        [console_scripts]
-        pymusic=pymusic:cli
-    """
+    entry_points = {
+        'console_scripts': [
+            'pymusic-cli = pymusic.clo'
+        ]
+    }
+
 )
