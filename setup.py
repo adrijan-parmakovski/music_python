@@ -18,7 +18,7 @@ setup(
     ],
     entry_points = {
         'console_scripts': [
-            'pymusic-cli = pymusic.clo'
+            'pymusic=pymusic.main.cli'
         ]
     }
 
