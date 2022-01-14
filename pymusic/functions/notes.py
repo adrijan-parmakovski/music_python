@@ -1,7 +1,7 @@
-from functions.settings import MAJOR_SCALE_HALFSTEPS
+from settings import MAJOR_SCALE_HALFSTEPS
 
-from functions.halfsteps import interval_to_halfsteps, degree_to_halfsteps, notes_to_halfsteps
-from functions.alphabet import return_chromatic_scale, degree_to_alph_letter
+from halfsteps import interval_to_halfsteps, degree_to_halfsteps, notes_to_halfsteps
+from alphabet import return_chromatic_scale, degree_to_alph_letter
 
 import logging
 

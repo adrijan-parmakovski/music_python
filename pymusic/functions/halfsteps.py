@@ -1,7 +1,7 @@
-from functions.settings import INTERVALS_BY_HALFSTEPS, MAJOR_SCALE_HALFSTEPS, NOTES
+from settings import INTERVALS_BY_HALFSTEPS, MAJOR_SCALE_HALFSTEPS, NOTES
 
-from functions.alphabet import return_chromatic_scale, return_note_letter, tonic_to_alph_order
-from functions.degrees import degree_order
+from alphabet import return_chromatic_scale, return_note_letter, tonic_to_alph_order
+from degrees import degree_order
 
 
 def interval_to_halfsteps(interval: str) -> int:

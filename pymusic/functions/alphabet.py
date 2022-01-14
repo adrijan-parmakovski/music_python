@@ -1,5 +1,5 @@
-from functions.settings import ALPHABET, NOTES
-from functions.degrees import degree_order
+from settings import ALPHABET, NOTES
+from degrees import degree_order
 import re
 
 def tonic_to_alph_order(tonic: str) -> list:
