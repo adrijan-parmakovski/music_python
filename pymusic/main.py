@@ -1,4 +1,9 @@
 import click
+import dotenv
+load_dotenv()
+
+import sys, os
+sys.path.append(os.environ["FUNCTIONS_DIR"])
 from functions.scales import tonic_to_scale
 
 @click.command()

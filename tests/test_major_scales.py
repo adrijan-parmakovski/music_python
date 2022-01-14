@@ -1,4 +1,6 @@
 import unittest
+import dotenv
+load_dotenv()
 
 import sys, os
 sys.path.append(

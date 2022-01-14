@@ -1,5 +1,11 @@
+TUNNING_FQ = 440
+FUNCTIONS_DIR = 'pymusic/functions'
+
+
 # main note vocabulary, or alphabet
 ALPHABET = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+
+
 
 # All existing notes and their eharmonic equivalents
 NOTES = [
