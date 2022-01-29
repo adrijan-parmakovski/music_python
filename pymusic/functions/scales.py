@@ -1,3 +1,4 @@
+import sys
 from settings import SCALES
 from notes import degree_to_note
 
@@ -17,5 +18,5 @@ def tonic_to_scale(
 
 if __name__ == '__main__':
     print(
-        tonic_to_scale('C', 'minor')
+        tonic_to_scale(sys.argv[1], sys.argv[2])
     )
